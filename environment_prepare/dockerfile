@@ -1,0 +1,26 @@
+# 从ubuntu基础镜像安装开发环境
+FROM ubuntu:20.04
+USER root
+
+# 走代理
+RUN export https_proxy=http://10.1.14.140:8848;export http_proxy=http://10.1.14.140:8848;export all_proxy=socks5://10.1.14.140:8848
+
+# 更新apt
+RUN apt update \
+    && apt upgrade
+
+# 安装python和pip
+RUN apt-get install python3.8 \
+    && apt install python3-pip \
+    && pip3 install --upgrade pip
+
+# 安装openssh
+RUN apt install openssh-server
+
+# 换清华源
+RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 安装python的依赖包
+RUN pip3 install -r ./requirement
+
+#
